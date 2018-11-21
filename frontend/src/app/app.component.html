@@ -1,0 +1,5 @@
+<div class="container" *ngIf="gif">
+  <h1>{{gif.query}}</h1>
+  <p>{{gif.fullText}}</p>
+  <img [src]="gif.imgUrl">
+</div>
