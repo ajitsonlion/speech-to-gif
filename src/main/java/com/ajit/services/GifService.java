@@ -4,11 +4,14 @@ import com.ajit.models.Gif;
 import com.ajit.models.GifQuery;
 import com.ajit.repository.GiphyRepository;
 import com.ajit.repository.TenorRepository;
-import com.uttesh.exude.ExudeData;
 import com.uttesh.exude.exception.InvalidDataException;
+import org.lionsoul.jcseg.extractor.impl.TextRankKeywordsExtractor;
+import org.lionsoul.jcseg.tokenizer.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,7 +34,7 @@ public class GifService {
         gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
     }
 
-    public Gif fetchFunnyGif(final GifQuery gifQuery) throws InvalidDataException {
+    public Gif fetchFunnyGif(final GifQuery gifQuery) throws   JcsegException, IOException {
         final String fullText = gifQuery.getTexts().get(0);
         final String query = removeStopWords(fullText);
         final Gif gif = new Gif();
@@ -42,7 +45,25 @@ public class GifService {
     }
 
 
-    private String removeStopWords(String fullText) throws InvalidDataException {
-        return ExudeData.getInstance().filterStoppings(fullText);
+    private String removeStopWords(String fullText) throws JcsegException, IOException {
+        JcsegTaskConfig config = new JcsegTaskConfig(true);
+        config.setClearStopwords(true);
+        config.setAppendCJKSyn(false);
+        config.setKeepUnregWords(false);
+        config.setEnSecondSeg(false);
+        ADictionary dic = DictionaryFactory.createSingletonDictionary(config);
+        ISegment seg = SegmentFactory.createJcseg(
+                JcsegTaskConfig.COMPLEX_MODE,
+                config, dic);
+
+
+        TextRankKeywordsExtractor extractor = new TextRankKeywordsExtractor(seg);
+        extractor.setMaxIterateNum(100);
+        extractor.setWindowSize(10);
+        extractor.setKeywordsNum(2);
+        // Set the maximum phrase length, default is 5
+        List<String> keywords = extractor.getKeywords(new StringReader(fullText));
+
+        return String.join(" ", keywords);
     }
 }
