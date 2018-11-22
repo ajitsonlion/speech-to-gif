@@ -28,7 +28,7 @@ public class GifService {
         gifMethods.add((gif) -> giphyRepository.byRandom(gif));
         gifMethods.add((gif) -> giphyRepository.bySearch(gif));
         gifMethods.add((gif) -> giphyRepository.byTranslation(gif));
-        gifMethods.add((gif) -> tenorRepository.searchTenorForGif(gif));
+        gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
     }
 
     public Gif fetchFunnyGif(final GifQuery gifQuery) throws InvalidDataException {

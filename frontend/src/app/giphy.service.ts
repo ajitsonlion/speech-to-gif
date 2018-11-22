@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {Gif} from "./gif";
-import {catchError} from "rxjs/operators";
+import {Gif} from './gif';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

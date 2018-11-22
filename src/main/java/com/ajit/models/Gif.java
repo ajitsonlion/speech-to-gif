@@ -15,11 +15,11 @@ public class Gif {
     }
 
     public String getQuery() {
-        return query.trim();
+        return query.isEmpty() ? fullText : query;
     }
 
     public void setQuery(String query) {
-        this.query = query;
+        this.query = query.trim();
     }
 
     public String getFullText() {

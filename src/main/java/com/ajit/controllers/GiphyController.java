@@ -1,8 +1,7 @@
 package com.ajit.controllers;
 
-import at.mukprojects.giphy4j.exception.GiphyException;
-import com.ajit.models.GifQuery;
 import com.ajit.models.Gif;
+import com.ajit.models.GifQuery;
 import com.ajit.services.GifService;
 import com.uttesh.exude.exception.InvalidDataException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,8 @@ public class GiphyController {
 
     @PostMapping("query")
     @ResponseBody
-    public Gif hello(@RequestBody GifQuery queries) throws GiphyException, InvalidDataException {
+    public Gif queryFunnyGif(@RequestBody GifQuery gifQuery) throws InvalidDataException {
 
-        return gifService.fetchFunnyGif(queries);
+        return gifService.fetchFunnyGif(gifQuery);
     }
 }

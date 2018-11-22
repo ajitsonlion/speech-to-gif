@@ -1,16 +1,15 @@
 import {Injectable, NgZone} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
-import {filter} from "rxjs/operators";
+import {filter} from 'rxjs/operators';
 
 declare const annyang: any;
-declare const SpeechKITT: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpeechService {
 
-  private _speechResult$ = new BehaviorSubject<string[]>(null);
+  private _speechResult$ = new BehaviorSubject<string[]>(['I am ready']);
   errors$ = new Subject<{ [key: string]: any }>();
   listening = false;
 

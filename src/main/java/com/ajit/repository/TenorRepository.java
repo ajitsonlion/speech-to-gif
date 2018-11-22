@@ -19,7 +19,7 @@ public class TenorRepository {
     private static final String SEARCH_URL = BASE_URL + "/search/";
 
 
-    public Gif searchTenorForGif(final Gif gif) {
+    public Gif byScrapping(final Gif gif) {
         gif.setByUsing("TENOR SEARCH");
         try {
             final String url = buildTenorUrl(gif.getQuery());

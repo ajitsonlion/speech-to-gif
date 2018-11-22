@@ -21,7 +21,7 @@ public class GiphyRepository {
         logger.info("Using Translate method");
         gif.setByUsing("GIPHY TRANSLATION");
         try {
-            final SearchGiphy translate = giphy.translate(gif.getFullText().replace(' ', '-'));
+            final SearchGiphy translate = giphy.translate(gif.getQuery().replace(' ', '-'));
             final String imgUrl = translate.getData().getImages().getOriginal().getUrl();
             gif.setImgUrl(imgUrl);
         } catch (final GiphyException e) {

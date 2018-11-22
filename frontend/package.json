@@ -7,6 +7,7 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -21,7 +22,9 @@
     "@angular/material": "^7.0.4",
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
+    "@angular/pwa": "^0.10.6",
     "@angular/router": "~7.0.0",
+    "@angular/service-worker": "~7.0.0",
     "@types/lodash": "^4.14.118",
     "annyang": "^2.6.1",
     "compromise": "^11.12.3",

@@ -1,18 +1,8 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  NgZone,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {SpeechService} from './speech.service';
 import {GiphyService} from './giphy.service';
-import {switchMap, tap} from "rxjs/operators";
-import {Gif} from "./gif";
-
-declare const SpeechKITT: any;
+import {switchMap, tap} from 'rxjs/operators';
+import {Gif} from './gif';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +10,7 @@ declare const SpeechKITT: any;
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
   gif: Gif;
 
   constructor(private speechService: SpeechService,
@@ -33,7 +23,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.speechService.speechResult$.pipe(
-      tap(() => this.gif = null),
+      tap(() => {
+        this.gif = null;
+        this.cdRef.detectChanges();
+      }),
       switchMap(text => this.giphyService.searchGif(text)),
     ).subscribe((gif: Gif) => {
       console.log({...gif});
@@ -50,14 +43,4 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.speechService.startListening();
   }
 
-  ngAfterViewInit(): void {
-    // Tell KITT to use annyang
-    SpeechKITT.annyang();
-
-    // Define a stylesheet for KITT to use
-
-    // Render KITT's interface
-    SpeechKITT.vroom();
-
-  }
 }
