@@ -19,11 +19,11 @@ public class GiphyRepository {
 
     public Gif byTranslation(final Gif gif) {
         logger.info("Using Translate method");
-        gif.setByUsing("GIPHY TRANSLATION");
         try {
             final SearchGiphy translate = giphy.translate(gif.getQuery().replace(' ', '-'));
             final String imgUrl = translate.getData().getImages().getOriginal().getUrl();
             gif.setImgUrl(imgUrl);
+            gif.setByUsing("GIPHY TRANSLATION");
         } catch (final GiphyException e) {
             logger.error("Error while fetching by translation ", e, gif);
         }
@@ -32,11 +32,11 @@ public class GiphyRepository {
 
     public Gif bySearch(final Gif gif) {
         logger.info("Using Search method");
-        gif.setByUsing("GIPHY SEARCH");
         try {
             final SearchFeed searchFeed = giphy.search(gif.getQuery().replace(' ', '-'), new Random().nextInt(5));
             final String imgUrl = searchFeed.getDataList().get(0).getImages().getOriginal().getUrl();
             gif.setImgUrl(imgUrl);
+            gif.setByUsing("GIPHY SEARCH");
         } catch (final GiphyException e) {
             logger.error("Error while fetching by translation ", e, gif);
             return byTranslation(gif);
@@ -47,11 +47,11 @@ public class GiphyRepository {
 
     public Gif byRandom(final Gif gif) {
         logger.info("Using Random method");
-        gif.setByUsing("GIPHY RANDOM");
         try {
             final SearchRandom random = giphy.searchRandom(gif.getQuery().replace(' ', '-'));
             final String imgUrl = random.getData().getImageUrl();
             gif.setImgUrl(imgUrl);
+            gif.setByUsing("GIPHY RANDOM");
         } catch (final GiphyException e) {
             logger.error("Error while fetching by translation ", e, gif);
             return byTranslation(gif);

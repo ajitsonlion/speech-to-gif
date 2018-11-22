@@ -3,6 +3,7 @@ package com.ajit.services;
 import com.ajit.models.Gif;
 import com.ajit.models.GifQuery;
 import com.ajit.repository.GiphyRepository;
+import com.ajit.repository.GoogleRepository;
 import com.ajit.repository.TenorRepository;
 import org.lionsoul.jcseg.extractor.impl.TextRankKeywordsExtractor;
 import org.lionsoul.jcseg.tokenizer.core.*;
@@ -23,7 +24,8 @@ public class GifService {
 
     @Autowired
     private TenorRepository tenorRepository;
-
+    @Autowired
+    private GoogleRepository googleRepository;
     private List<Function<Gif, Gif>> gifMethods = new ArrayList<>();
 
     public GifService() {
@@ -31,6 +33,7 @@ public class GifService {
         gifMethods.add((gif) -> giphyRepository.bySearch(gif));
         gifMethods.add((gif) -> giphyRepository.byTranslation(gif));
         gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
+        gifMethods.add((gif) -> googleRepository.byScrapping(gif));
     }
 
     public Gif fetchFunnyGif(final GifQuery gifQuery) throws JcsegException, IOException {
