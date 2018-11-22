@@ -8,16 +8,15 @@
   display: flex;
   flex-flow: column;
   overflow: hidden;
-
 }
 
 .text {
   text-transform: uppercase;
-  color: white;
+  //color: white;
   font-weight: bold;
   background: rgba(0, 0, 0, .1);
 }
 
 img {
-  height: 100vh;
+  height: 80vh;
 }

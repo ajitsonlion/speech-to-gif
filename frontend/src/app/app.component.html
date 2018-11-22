@@ -1,9 +1,9 @@
-<div class="container" *ngIf="gif && gif.imgUrl;else nothing"
-     [ngStyle]="{ 'background-image': 'url(' + gif.imgUrl + ')'}">
+<div class="container" *ngIf="gif && gif.imgUrl;else nothing">
 
-  <h1 class="text">{{gif.query || 'READY'}}</h1>
-  <p class="text">{{gif.fullText|| 'Say something and I will find funny Gif.'}}</p>
+  <h1 class="text">{{gif.query }}</h1>
+  <p class="text">{{gif.fullText }}</p>
 
+  <img [src]="gif.imgUrl">
 </div>
 <ng-template #nothing>
 
