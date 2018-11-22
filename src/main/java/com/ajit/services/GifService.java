@@ -4,7 +4,6 @@ import com.ajit.models.Gif;
 import com.ajit.models.GifQuery;
 import com.ajit.repository.GiphyRepository;
 import com.ajit.repository.TenorRepository;
-import com.uttesh.exude.exception.InvalidDataException;
 import org.lionsoul.jcseg.extractor.impl.TextRankKeywordsExtractor;
 import org.lionsoul.jcseg.tokenizer.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,9 @@ public class GifService {
         gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
     }
 
-    public Gif fetchFunnyGif(final GifQuery gifQuery) throws   JcsegException, IOException {
+    public Gif fetchFunnyGif(final GifQuery gifQuery) throws JcsegException, IOException {
         final String fullText = gifQuery.getTexts().get(0);
-        final String query = removeStopWords(fullText);
+        final String query = extractKeyWord(fullText);
         final Gif gif = new Gif();
         gif.setQuery(query);
         gif.setFullText(fullText);
@@ -45,7 +44,7 @@ public class GifService {
     }
 
 
-    private String removeStopWords(String fullText) throws JcsegException, IOException {
+    private String extractKeyWord(String fullText) throws JcsegException, IOException {
         JcsegTaskConfig config = new JcsegTaskConfig(true);
         config.setClearStopwords(true);
         config.setAppendCJKSyn(false);
