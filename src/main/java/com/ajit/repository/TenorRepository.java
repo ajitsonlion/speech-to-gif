@@ -46,7 +46,6 @@ public class TenorRepository {
             final Elements imageElements = doc.getElementsByTag("figure");
             final int randomMax = imageElements.size() / 4;
             final Element imageElement = imageElements.get(new Random().nextInt(randomMax)).child(0);
-
             // fetch the page for the image to get the larger gif
             final String largeImgSiteUrl = BASE_URL + imageElement.attr("href");
             final Document largeImageDoc = Jsoup.connect(largeImgSiteUrl).get();

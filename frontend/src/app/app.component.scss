@@ -1,17 +1,20 @@
 .container {
   margin: auto;
   text-align: center;
-  padding: 20px;
   height: 100%;
   display: flex;
   flex-flow: column;
   overflow: hidden;
 }
 
-.text {
+.text-container {
+  text-align: center;
   text-transform: uppercase;
   font-weight: bold;
-  background: rgba(0, 0, 0, .1);
+}
+
+.text {
+
 }
 
 img {

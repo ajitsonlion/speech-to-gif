@@ -1,7 +1,10 @@
 <div class="container" *ngIf="gif && gif.imgUrl;else nothing">
 
-  <h1 class="text">{{gif.query }}</h1>
-  <p class="text">{{gif.fullText }}</p>
+  <div class="text-container">
+    <h5 class="text">{{gif.query }}</h5>
+    <p class="text">{{gif.fullText }}</p>
+  </div>
+
 
   <img [src]="gif.imgUrl">
   <h6>{{gif.byUsing}}</h6>
