@@ -8,13 +8,15 @@ import at.mukprojects.giphy4j.exception.GiphyException;
 import com.ajit.models.Gif;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.Random;
 
 @Repository
 public class GiphyRepository {
-    private final Giphy giphy = new Giphy("fANff7PNrIxKjqqT8EFpT0xG1E0X1DeJ");
+    @Value("${API_KEY_GIPHY}")
+    private  Giphy giphy;
     private static Logger logger = LoggerFactory.getLogger(GiphyRepository.class);
 
     public Gif byTranslation(final Gif gif) {

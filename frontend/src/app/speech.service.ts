@@ -9,7 +9,7 @@ declare const annyang: any;
 })
 export class SpeechService {
 
-  private _speechResult$ = new BehaviorSubject<string[]>(['I am ready.']);
+  private _speechResult$ = new BehaviorSubject<string[]>(['Hello']);
   errors$ = new Subject<{ [key: string]: any }>();
   listening = false;
 

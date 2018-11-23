@@ -30,7 +30,7 @@ public class GifService {
 
     public GifService() {
         gifMethods.add((gif) -> giphyRepository.byRandom(gif));
-        gifMethods.add((gif) -> giphyRepository.bySearch(gif));
+        // gifMethods.add((gif) -> giphyRepository.bySearch(gif));
         gifMethods.add((gif) -> giphyRepository.byTranslation(gif));
         gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
         gifMethods.add((gif) -> googleRepository.byScrapping(gif));
