@@ -32,7 +32,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/annyang/dist/annyang.min.js"
+              "./node_modules/annyang/dist/annyang.min.js",
+              "./node_modules/stompjs/lib/stomp.min.js"
             ]
           },
           "configurations": {

@@ -1,7 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
 import {SpeechService} from './speech.service';
-import {GiphyService} from './giphy.service';
-import {switchMap, tap} from 'rxjs/operators';
 import {Gif} from './gif';
 
 @Component({
@@ -15,21 +13,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private speechService: SpeechService,
               private ngZone: NgZone,
-              private cdRef: ChangeDetectorRef,
-              private giphyService: GiphyService) {
+              private cdRef: ChangeDetectorRef) {
     this.speechService.init();
     this.startListening();
   }
 
   ngOnInit() {
-    this.speechService.speechResult$.pipe(
-      tap(() => {
-        this.gif = null;
-        this.cdRef.detectChanges();
-      }),
-      switchMap(text => this.giphyService.searchGif(text)),
-    ).subscribe((gif: Gif) => {
-      console.log({...gif});
+
+    this.speechService._ws$.asObservable().subscribe((gif: Gif) => {
       this.gif = gif;
       this.cdRef.detectChanges();
     });

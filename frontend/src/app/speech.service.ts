@@ -1,29 +1,54 @@
 import {Injectable, NgZone} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import * as SockJS from 'sockjs-client';
+import {Gif} from './gif';
 
 declare const annyang: any;
+declare const Stomp: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpeechService {
 
-  private _speechResult$ = new BehaviorSubject<string[]>(['Hello']);
+  _ws$ = new Subject<Gif>();
   errors$ = new Subject<{ [key: string]: any }>();
   listening = false;
+  private serverUrl = '/socket';
+  private stompClient;
 
   constructor(private zone: NgZone) {
+    this.initializeWebSocketConnection();
+
   }
 
-  get speechResult$() {
-    return this._speechResult$.asObservable().pipe(filter(result => !!result));
+  initializeWebSocketConnection() {
+
+
+    const ws = new SockJS(this.serverUrl);
+    this.stompClient = Stomp.over(ws);
+    this.stompClient.debug = null;
+
+    this.stompClient.connect({}, (frame) => {
+      this.sendMessage('Hello');
+      this.stompClient.subscribe('/gifs', (message) => {
+        if (message.body) {
+          console.log('RESPONSE WS ', JSON.parse(message.body));
+          this._ws$.next(JSON.parse(message.body));
+        }
+      });
+    });
   }
+
+  sendMessage(message) {
+    this.stompClient.send('/app/send/query', {}, message);
+  }
+
 
   init() {
     // Log anything the user says and what speech recognition thinks it might be
     annyang.addCallback('result', (userSaid) => {
-      this._speechResult$.next(userSaid);
+      this.sendMessage(userSaid);
     });
     annyang.addCallback('errorNetwork', (err) => {
       this._handleError('network', 'A network error occurred.', err);

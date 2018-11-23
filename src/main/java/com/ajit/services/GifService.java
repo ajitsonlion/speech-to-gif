@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
@@ -21,16 +22,16 @@ import java.util.function.Function;
 public class GifService {
     @Autowired
     private GiphyRepository giphyRepository;
-
     @Autowired
     private TenorRepository tenorRepository;
     @Autowired
     private GoogleRepository googleRepository;
+
     private List<Function<Gif, Gif>> gifMethods = new ArrayList<>();
 
     public GifService() {
         gifMethods.add((gif) -> giphyRepository.byRandom(gif));
-        // gifMethods.add((gif) -> giphyRepository.bySearch(gif));
+        gifMethods.add((gif) -> giphyRepository.bySearch(gif));
         gifMethods.add((gif) -> giphyRepository.byTranslation(gif));
         gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
         gifMethods.add((gif) -> googleRepository.byScrapping(gif));
@@ -53,19 +54,25 @@ public class GifService {
         config.setAppendCJKSyn(false);
         config.setKeepUnregWords(false);
         config.setEnSecondSeg(false);
-        ADictionary dic = DictionaryFactory.createSingletonDictionary(config);
-        ISegment seg = SegmentFactory.createJcseg(
+        final ADictionary dic = DictionaryFactory.createSingletonDictionary(config);
+        final ISegment seg = SegmentFactory.createJcseg(
                 JcsegTaskConfig.COMPLEX_MODE,
                 config, dic);
 
-
-        TextRankKeywordsExtractor extractor = new TextRankKeywordsExtractor(seg);
+        final TextRankKeywordsExtractor extractor = new TextRankKeywordsExtractor(seg);
         extractor.setMaxIterateNum(100);
         extractor.setWindowSize(10);
         extractor.setKeywordsNum(2);
         // Set the maximum phrase length, default is 5
-        List<String> keywords = extractor.getKeywords(new StringReader(fullText));
+        final List<String> keywords = extractor.getKeywords(new StringReader(fullText));
 
         return String.join(" ", keywords);
+    }
+
+    public Gif fetchFunnyGif(String query) throws IOException, JcsegException {
+        List<String> strings = Arrays.asList(query.split(","));
+        final GifQuery gifQuery = new GifQuery();
+        gifQuery.setTexts(strings);
+        return fetchFunnyGif(gifQuery);
     }
 }

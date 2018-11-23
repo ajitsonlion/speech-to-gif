@@ -10,6 +10,16 @@ public class Gif {
         return imgUrl;
     }
 
+    @Override
+    public String toString() {
+        return "Gif{" +
+                "imgUrl='" + imgUrl + '\'' +
+                ", query='" + query + '\'' +
+                ", fullText='" + fullText + '\'' +
+                ", byUsing='" + byUsing + '\'' +
+                '}';
+    }
+
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
     }

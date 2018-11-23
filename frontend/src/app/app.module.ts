@@ -16,7 +16,6 @@ import {ServiceWorkerModule} from '@angular/service-worker';
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: false})
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -35,7 +35,7 @@ public class GiphyRepository {
     public Gif bySearch(final Gif gif) {
         logger.info("Using Search method");
         try {
-            final SearchFeed searchFeed = giphy.search(gif.getQuery().replace(' ', '-'), new Random().nextInt(5));
+            final SearchFeed searchFeed = giphy.search(gif.getQuery().replace(' ', '-'), new Random().nextInt(10));
             final String imgUrl = searchFeed.getDataList().get(0).getImages().getOriginal().getUrl();
             gif.setImgUrl(imgUrl);
             gif.setByUsing("GIPHY SEARCH");
