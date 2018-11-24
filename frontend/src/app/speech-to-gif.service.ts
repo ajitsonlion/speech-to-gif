@@ -1,7 +1,8 @@
 import {Injectable, NgZone} from '@angular/core';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import {Gif} from './gif';
+import {distinctUntilChanged} from 'rxjs/operators';
 
 declare const annyang: any;
 declare const Stomp: any;
@@ -9,9 +10,10 @@ declare const Stomp: any;
 @Injectable({
   providedIn: 'root'
 })
-export class SpeechService {
+export class SpeechToGifService {
 
   _ws$ = new Subject<Gif>();
+  private _loading$ = new BehaviorSubject<boolean>(false);
   errors$ = new Subject<{ [key: string]: any }>();
   listening = false;
   private serverUrl = '/socket';
@@ -19,12 +21,21 @@ export class SpeechService {
 
   constructor(private zone: NgZone) {
     this.initializeWebSocketConnection();
+  }
 
+  get loading$() {
+    return this._loading$.asObservable().pipe(distinctUntilChanged());
+  }
+
+  startLoading() {
+    this._loading$.next(true);
+  }
+
+  stopLoading() {
+    this._loading$.next(false);
   }
 
   initializeWebSocketConnection() {
-
-
     const ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     this.stompClient.debug = null;
@@ -33,7 +44,8 @@ export class SpeechService {
       this.sendMessage('Hello');
       this.stompClient.subscribe('/gifs', (message) => {
         if (message.body) {
-          console.log('RESPONSE WS ', JSON.parse(message.body));
+          //   console.log('RESPONSE WS ', JSON.parse(message.body));
+          this.stopLoading();
           this._ws$.next(JSON.parse(message.body));
         }
       });
@@ -41,6 +53,7 @@ export class SpeechService {
   }
 
   sendMessage(message) {
+    this.startLoading();
     this.stompClient.send('/app/send/query', {}, message);
   }
 
@@ -48,6 +61,7 @@ export class SpeechService {
   init() {
     // Log anything the user says and what speech recognition thinks it might be
     annyang.addCallback('result', (userSaid) => {
+      console.log(userSaid);
       this.sendMessage(userSaid);
     });
     annyang.addCallback('errorNetwork', (err) => {

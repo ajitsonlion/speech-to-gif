@@ -1,6 +1,8 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit} from '@angular/core';
-import {SpeechService} from './speech.service';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {SpeechToGifService} from './speech-to-gif.service';
 import {Gif} from './gif';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,27 +13,43 @@ import {Gif} from './gif';
 export class AppComponent implements OnInit, OnDestroy {
   gif: Gif;
 
-  constructor(private speechService: SpeechService,
-              private ngZone: NgZone,
+  loaded$: Observable<boolean>;
+
+  // loadedImage = false;
+
+  constructor(private speechToGifService: SpeechToGifService,
               private cdRef: ChangeDetectorRef) {
-    this.speechService.init();
+    this.speechToGifService.init();
     this.startListening();
   }
 
   ngOnInit() {
-
-    this.speechService._ws$.asObservable().subscribe((gif: Gif) => {
+    this.speechToGifService._ws$.asObservable().subscribe((gif: Gif) => {
       this.gif = gif;
+      // this.loadedImage = false;
+      //  console.log(this.gif, this.loadedImage);
+      console.log(this.gif);
       this.cdRef.detectChanges();
     });
+    this.loaded$ = this.speechToGifService.loading$.pipe(map(loaded => !loaded));
   }
 
   ngOnDestroy() {
-    this.speechService.abort();
+    this.speechToGifService.abort();
   }
 
   startListening(): void {
-    this.speechService.startListening();
+    this.speechToGifService.startListening();
   }
 
+  load(e) {
+    console.log(e);
+
+    // this.speechToGifService.stopLoading();
+  }
+
+  reload() {
+    this.speechToGifService.sendMessage(this.gif.fullText);
+
+  }
 }

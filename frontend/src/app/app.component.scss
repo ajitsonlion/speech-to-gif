@@ -2,7 +2,6 @@
   margin: auto;
   text-align: center;
   height: 100%;
-  display: flex;
   flex-flow: column;
   overflow: hidden;
 }
@@ -19,7 +18,21 @@ img {
   object-fit: contain;
 }
 
-h6 {
+h3, h6 {
   margin: 5px;
-  font-size: xx-small;
+}
+
+.image-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.image-container {
+  height: 80vh;
+  max-height: 80vh;
+}
+
+.favourite {
 }

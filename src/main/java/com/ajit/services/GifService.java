@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -27,23 +24,31 @@ public class GifService {
     @Autowired
     private GoogleRepository googleRepository;
 
-    private List<Function<Gif, Gif>> gifMethods = new ArrayList<>();
+    private Map<String, Function<Gif, Gif>> gifMethods = new HashMap<>();
 
     public GifService() {
-        gifMethods.add((gif) -> giphyRepository.byRandom(gif));
-        gifMethods.add((gif) -> giphyRepository.bySearch(gif));
-        gifMethods.add((gif) -> giphyRepository.byTranslation(gif));
-        gifMethods.add((gif) -> tenorRepository.byScrapping(gif));
-        gifMethods.add((gif) -> googleRepository.byScrapping(gif));
+        gifMethods.put("GIPHY RANDOM", (gif) -> giphyRepository.byRandom(gif));
+        gifMethods.put("GIPHY SEARCH", (gif) -> giphyRepository.bySearch(gif));
+        gifMethods.put("GIPHY TRANSLATION", (gif) -> giphyRepository.byTranslation(gif));
+        gifMethods.put("TENOR SEARCH", (gif) -> tenorRepository.byScrapping(gif));
+        gifMethods.put("GOOGLE SCRAPPING", (gif) -> googleRepository.byScrapping(gif));
     }
 
-    public Gif fetchFunnyGif(final GifQuery gifQuery) throws JcsegException, IOException {
+    public Gif fetchFunnyGif(String query) throws IOException, JcsegException {
+        List<String> strings = Arrays.asList(query.split(","));
+        final GifQuery gifQuery = new GifQuery();
+        gifQuery.setTexts(strings);
+        return fetchFunnyGif(gifQuery);
+    }
+
+    private Gif fetchFunnyGif(final GifQuery gifQuery) throws JcsegException, IOException {
         final String fullText = gifQuery.getTexts().get(0);
         final String query = extractKeyWord(fullText);
         final Gif gif = new Gif();
         gif.setQuery(query);
         gif.setFullText(fullText);
-        return this.gifMethods.get(new Random().nextInt(this.gifMethods.size())).apply(gif);
+        final int randomIndex = new Random().nextInt(this.gifMethods.size());
+        return new ArrayList<>(this.gifMethods.values()).get(randomIndex).apply(gif);
 
     }
 
@@ -69,10 +74,5 @@ public class GifService {
         return String.join(" ", keywords);
     }
 
-    public Gif fetchFunnyGif(String query) throws IOException, JcsegException {
-        List<String> strings = Arrays.asList(query.split(","));
-        final GifQuery gifQuery = new GifQuery();
-        gifQuery.setTexts(strings);
-        return fetchFunnyGif(gifQuery);
-    }
+
 }

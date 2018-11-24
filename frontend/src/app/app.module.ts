@@ -5,6 +5,7 @@ import {AppComponent} from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ServiceWorkerModule} from '@angular/service-worker';
+import {MatButtonModule, MatIconModule, MatRippleModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,9 @@ import {ServiceWorkerModule} from '@angular/service-worker';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatRippleModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: false})
   ],
   bootstrap: [AppComponent]

@@ -23,7 +23,7 @@ public class GiphyRepository {
         logger.info("Using Translate method");
         try {
             final SearchGiphy translate = giphy.translate(gif.getQuery().replace(' ', '-'));
-            final String imgUrl = translate.getData().getImages().getOriginal().getUrl();
+            final String imgUrl = translate.getData().getImages().getDownsizedMedium().getUrl();
             gif.setImgUrl(imgUrl);
             gif.setByUsing("GIPHY TRANSLATION");
         } catch (final GiphyException e) {
@@ -36,7 +36,7 @@ public class GiphyRepository {
         logger.info("Using Search method");
         try {
             final SearchFeed searchFeed = giphy.search(gif.getQuery().replace(' ', '-'), new Random().nextInt(10));
-            final String imgUrl = searchFeed.getDataList().get(0).getImages().getOriginal().getUrl();
+            final String imgUrl = searchFeed.getDataList().get(0).getImages().getDownsizedMedium().getUrl();
             gif.setImgUrl(imgUrl);
             gif.setByUsing("GIPHY SEARCH");
         } catch (final GiphyException e) {
