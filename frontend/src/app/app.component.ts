@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   loaded$: Observable<boolean>;
 
-  // loadedImage = false;
+  imageLoaded = false;
 
   constructor(private speechToGifService: SpeechToGifService,
               private cdRef: ChangeDetectorRef) {
@@ -26,8 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.speechToGifService._ws$.asObservable().subscribe((gif: Gif) => {
       this.gif = gif;
-      // this.loadedImage = false;
-      //  console.log(this.gif, this.loadedImage);
+      this.imageLoaded = false;
+      //  console.log(this.gif, this.imageLoaded);
       console.log(this.gif);
       this.cdRef.detectChanges();
     });
@@ -44,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   load(e) {
     console.log(e);
+    this.imageLoaded = true;
 
     // this.speechToGifService.stopLoading();
   }

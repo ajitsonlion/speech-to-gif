@@ -6,7 +6,7 @@
   overflow: hidden;
 }
 
-.text-container {
+.gif-container {
   text-align: center;
   text-transform: uppercase;
   font-weight: bold;
@@ -22,7 +22,7 @@ h3, h6 {
   margin: 5px;
 }
 
-.image-footer {
+.gif-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -35,4 +35,12 @@ h3, h6 {
 }
 
 .favourite {
+}
+
+.hidden {
+  display: none;
+}
+
+.loading-background {
+  background: url("https://cdn.dribbble.com/users/1319489/screenshots/2946353/monkey-1.gif") no-repeat center;
 }
