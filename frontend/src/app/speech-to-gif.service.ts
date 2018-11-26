@@ -2,17 +2,16 @@ import {Injectable, NgZone} from '@angular/core';
 import {BehaviorSubject, Subject} from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import {Gif} from './gif';
-import {distinctUntilChanged} from 'rxjs/operators';
 
 declare const annyang: any;
 declare const Stomp: any;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SpeechToGifService {
 
-  _ws$ = new Subject<Gif>();
+  private _gifForSpeech$ = new Subject<Gif>();
   private _loading$ = new BehaviorSubject<boolean>(false);
   errors$ = new Subject<{ [key: string]: any }>();
   listening = false;
@@ -23,8 +22,9 @@ export class SpeechToGifService {
     this.initializeWebSocketConnection();
   }
 
-  get loading$() {
-    return this._loading$.asObservable().pipe(distinctUntilChanged());
+
+  get gifForSpeech$() {
+    return this._gifForSpeech$.asObservable();
   }
 
   startLoading() {
@@ -46,7 +46,7 @@ export class SpeechToGifService {
         if (message.body) {
           //   console.log('RESPONSE WS ', JSON.parse(message.body));
           this.stopLoading();
-          this._ws$.next(JSON.parse(message.body));
+          this._gifForSpeech$.next(JSON.parse(message.body));
         }
       });
     });
@@ -87,7 +87,7 @@ export class SpeechToGifService {
       this.errors$.next({
         error,
         msg,
-        obj
+        obj,
       });
     });
   }

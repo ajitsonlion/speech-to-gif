@@ -1,0 +1,26 @@
+<div [class.loading-background]="!imageLoaded">
+  <div class="gif-container">
+    <h3 class="text">{{gif.query }}</h3>
+    <p class="text">{{gif.fullText }}</p>
+
+    <div class="gif-header">
+
+      <h6>{{gif.byUsing}}</h6>
+
+      <div>
+        <button mat-icon-button (click)="reload()" color="primary">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" class="favourite">
+          <mat-icon>favorite</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="image-container">
+    <img [src]="gif.imgUrl" (load)="onImageLoad($event)" [class.hidden]="!imageLoaded">
+  </div>
+</div>
+
+
